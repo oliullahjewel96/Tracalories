@@ -15,9 +15,9 @@ const ItemCtrl = (function() {
 
     const data = {
         items: [
-            { id: 0, name: "Steak Dinner", calories: 1200 },
-            { id: 1, name: "Cookie", calories: 400 },
-            { id: 2, name: "Eggs", calories: 300 },
+            // { id: 0, name: "Steak Dinner", calories: 1200 },
+            // { id: 1, name: "Cookie", calories: 400 },
+            // { id: 2, name: "Eggs", calories: 300 },
         ],
         currentItem: null,
         totalCalories: 0,
@@ -93,6 +93,9 @@ const UICtrl = (function() {
             };
         },
         addListItem: function(item) {
+            //Show item list
+
+            document.querySelector(UISelectors.itemList).style.display = "block";
             //create li element
 
             const li = document.createElement("li");
@@ -114,6 +117,13 @@ const UICtrl = (function() {
             document
                 .querySelector(UISelectors.itemList)
                 .insertAdjacentElement("beforeend", li);
+        },
+        clearInput: function() {
+            document.querySelector(UISelectors.itemNameInput).value = "";
+            document.querySelector(UISelectors.itemCalorieInput).value = "";
+        },
+        hideItem: function() {
+            document.querySelector(UISelectors.itemList).style.display = "none";
         },
         getSelectors: function() {
             return UISelectors;
@@ -148,6 +158,9 @@ const App = (function(ItemCtrl, UICtrl) {
             const newItem = ItemCtrl.addItem(input.name, input.calories);
             //Add item to UI list
             UICtrl.addListItem(newItem);
+            //clear fields
+
+            UICtrl.clearInput();
         }
         e.preventDefault();
     };
@@ -157,9 +170,15 @@ const App = (function(ItemCtrl, UICtrl) {
             //Fetch Items from data structures
             const items = ItemCtrl.getItems();
 
-            //Populate list with items
+            //Check if any
 
-            UICtrl.populateListItem(items);
+            if (items.length === 0) {
+                UICtrl.hideItem();
+            } else {
+                //Populate list with items
+
+                UICtrl.populateListItem(items);
+            }
 
             //Load event listener
 
